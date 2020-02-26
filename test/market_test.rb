@@ -66,4 +66,55 @@ class MarketTest < Minitest::Test
     assert_equal 48.75, @vendor3.potential_revenue
   end
 
+  def test_it_can_return_total_inventory
+    @vendor3.stock(@item3, 10)
+
+    @market.add_vendor(@vendor1)
+    @market.add_vendor(@vendor2)
+    @market.add_vendor(@vendor3)
+
+    expected = {
+      @item1 => {
+        quantity: 100,
+        vendors: [@vendor1, @vendor3]
+      },
+      @item2 => {
+        quantity: 7,
+        vendors: [@vendor1]
+      },
+      @item4 => {
+        quantity: 50,
+        vendors: [@vendor2]
+      },
+      @item3 => {
+        quantity: 35,
+        vendors: [@vendor2, @vendor3]
+      },
+    }
+    assert_equal expected, @market.total_inventory
+  end
+
+  def test_it_can_return_overstocked_items
+    @vendor3.stock(@item3, 10)
+
+    @market.add_vendor(@vendor1)
+    @market.add_vendor(@vendor2)
+    @market.add_vendor(@vendor3)
+
+    assert_equal [@item1], @market.overstocked_items
+    @vendor3.stock(@item3, 60)
+    assert_equal [@item1, @item3], @market.overstocked_items
+  end
+
+  def test_it_can_return_sorted_item_list
+    @vendor3.stock(@item3, 10)
+
+    @market.add_vendor(@vendor1)
+    @market.add_vendor(@vendor2)
+    @market.add_vendor(@vendor3)
+
+    expected = ["Banana Nice Cream", "Peach", "Peach-Raspberry Nice Cream", "Tomato"]
+    assert_equal expected, @market.sorted_item_list
+  end
+
 end
