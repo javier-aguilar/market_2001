@@ -15,4 +15,8 @@ class Vendor
     @inventory[item] += amount
   end
 
+  def potential_revenue
+    @inventory.sum { |item| item.first.price * item.last }
+  end
+
 end

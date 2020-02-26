@@ -60,4 +60,10 @@ class MarketTest < Minitest::Test
     assert_equal [@vendor1, @vendor3], @market.vendors_that_sell(@item1)
   end
 
+  def test_it_can_calculate_potential_revenue
+    assert_equal 29.75, @vendor1.potential_revenue
+    assert_equal 345.00, @vendor2.potential_revenue
+    assert_equal 48.75, @vendor3.potential_revenue
+  end
+
 end
